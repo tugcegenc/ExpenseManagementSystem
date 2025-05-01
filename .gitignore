@@ -1,0 +1,47 @@
+## Build results
+bin/
+obj/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Visual Studio
+.vscode/
+.vs/
+
+## Logs
+*.log
+
+## Dependency directories
+packages/
+node_modules/
+
+## dotenv
+.env
+
+## Others
+*.db
+*.sqlite
+*.sqlite3
+
+# Rider
+.idea/
+*.sln.iml
+
+## Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Backup & temp files
+*.bak
+*.tmp
+
+## Test results
+TestResults/
