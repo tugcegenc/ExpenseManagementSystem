@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Expense.Domain.Enums;
 using Expense.Schema.Base;
 
@@ -13,10 +14,12 @@ public class ExpenseClaimResponse : BaseResponse
     public PaymentMethod PaymentMethod { get; set; }
     public PaymentStatus PaymentStatus { get; set; }
     public string Location { get; set; }
-    public string? ReceiptFilePath { get; set; } 
     public string ReceiptFileUrl { get; set; }
     public ExpenseStatus Status { get; set; }
     public string? RejectReason { get; set; }
     public DateTime RequestDate { get; set; }
     public DateTime? ApprovedOrRejectedDate { get; set; }
+    
+    [JsonIgnore]
+    public string? ReceiptFilePath { get; set; } 
 }

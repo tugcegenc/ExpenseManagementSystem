@@ -1,8 +1,9 @@
 using Expense.Domain.Enums;
+using Expense.Schema.Base;
 
 namespace Expense.Schema.Responses;
 
-public class UserResponse
+public class UserResponse : BaseResponse
 {
     public long Id { get; set; }
     public string FullName { get; set; }

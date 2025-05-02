@@ -17,14 +17,14 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromQuery] LoginRequest request)
     {
         var response = await _authService.LoginAsync(request);
         return Ok(response);
     }
 
     [HttpPost("refresh-token")]
-    public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+    public async Task<IActionResult> RefreshToken([FromQuery] string refreshToken)
     {
         var response = await _authService.RefreshTokenAsync(refreshToken);
         return Ok(response);

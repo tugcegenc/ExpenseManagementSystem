@@ -15,3 +15,4 @@ namespace Expense.Domain.Interfaces.Repositories
         
     }
 }
+

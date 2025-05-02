@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Expense.Api.Controllers;
-[Authorize(Roles = "Admin")]
 
 [ApiController]
 [Route("api/[controller]")]
@@ -18,6 +17,7 @@ public class ExpenseCategoryController : ControllerBase
         _expenseCategoryService = expenseCategoryService;
     }
     
+    [Authorize(Roles = "Admin, Personnel")]
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -25,31 +25,41 @@ public class ExpenseCategoryController : ControllerBase
         return Ok(result);
     }
 
+    [Authorize(Roles = "Admin, Personnel")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
+        if (id <= 0)
+            return BadRequest("Invalid ID.");
         var result = await _expenseCategoryService.GetByIdAsync(id);
         return Ok(result);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateExpenseCategoryRequest request)
+    public async Task<IActionResult> Create([FromQuery] CreateExpenseCategoryRequest request)
     {
         var result = await _expenseCategoryService.CreateAsync(request);
         return Ok(result);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut]
-    public async Task<IActionResult> Update(long id, [FromBody] UpdateExpenseCategoryRequest request)
+    public async Task<IActionResult> Update(long id, [FromQuery] UpdateExpenseCategoryRequest request)
     {
-        var result = _expenseCategoryService.UpdateAsync(id,request);
+        if (id <= 0)
+            return BadRequest("Invalid ID.");
+        var result = await _expenseCategoryService.UpdateAsync(id,request);
         return Ok(result);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id)
     {
-        var result = _expenseCategoryService.DeleteAsync(id);
+        if (id <= 0)
+            return BadRequest("Invalid ID.");
+        var result = await _expenseCategoryService.DeleteAsync(id);
         return Ok(result);
     }
         

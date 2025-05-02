@@ -80,7 +80,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 // FluentValidation
 builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<UserRequestValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserRequestValidator>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

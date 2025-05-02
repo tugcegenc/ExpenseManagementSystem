@@ -27,6 +27,8 @@ public class EftSimulationLogController : ControllerBase
     [HttpGet("GetById/{id}")]
     public async Task<IActionResult> GetById(long id)
     {
+        if (id <= 0)
+            return BadRequest("invalid id");
         var result = await _eftSimulationLogService.GetByIdAsync(id);
         return Ok(result);
     }

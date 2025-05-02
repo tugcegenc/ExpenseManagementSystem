@@ -13,6 +13,6 @@ public interface IExpenseClaimService
     Task<ApiResponse> DeleteAsync(long id);
     Task<ApiResponse> ApproveAsync(long id);
     Task<ApiResponse> RejectAsync(long id, string reason);
-    Task<ApiResponse<List<ExpenseClaimResponse>>> GetByUserIdAsync();
+    Task<ApiResponse<List<ExpenseClaimResponse>>> GetClaimsByFilterAsync(ExpenseClaimFilterRequest filter);
 
 }

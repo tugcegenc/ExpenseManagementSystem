@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace Expense.Application.Validators;
 
-public class UserRequestValidator : AbstractValidator<CreateUserRequest>
+public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
 {
-    public UserRequestValidator()
+    public UpdateUserRequestValidator()
     {
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("First name is required.")
@@ -14,15 +14,6 @@ public class UserRequestValidator : AbstractValidator<CreateUserRequest>
         RuleFor(x => x.LastName)
             .NotEmpty().WithMessage("Last name is required.")
             .MaximumLength(50);
-
-        RuleFor(x => x.UserName)
-            .NotEmpty().WithMessage("Username is required.")
-            .MaximumLength(50);
-
-        RuleFor(x => x.IdentityNumber)
-            .NotEmpty().WithMessage("Identity number is required.")
-            .Matches(@"^[1-9][0-9]{10}$")
-            .WithMessage("Identity number must be 11 digits and cannot start with 0.");
 
         RuleFor(x => x.Email)
             .NotEmpty().WithMessage("Email is required.")

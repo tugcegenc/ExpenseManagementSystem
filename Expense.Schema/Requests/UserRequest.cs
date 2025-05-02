@@ -1,5 +1,6 @@
 using Swashbuckle.AspNetCore.Annotations;
 using Expense.Domain.Enums;
+using Expense.Domain.Entities;
 
 
 namespace Expense.Schema.Requests;
@@ -24,5 +25,6 @@ public class UpdateUserRequest
     public string LastName { get; set; } 
     public string Email { get; set; } 
     public string IBAN { get; set; }
+    public UserRole Role { get; set; }
 }
 

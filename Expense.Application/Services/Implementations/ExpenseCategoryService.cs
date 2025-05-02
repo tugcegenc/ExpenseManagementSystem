@@ -6,6 +6,7 @@ using Expense.Domain.Enums;
 using Expense.Domain.Interfaces;
 using Expense.Schema.Requests;
 using Expense.Schema.Responses;
+using Microsoft.EntityFrameworkCore;
 
 namespace Expense.Application.Services.Implementations;
 
@@ -77,19 +78,21 @@ public class ExpenseCategoryService : IExpenseCategoryService
 
     public async Task<ApiResponse> DeleteAsync(long id)
     {
-        var repo = _unitOfWork.GetRepository<ExpenseCategory>();
-        var entity = await repo.GetByIdAsync(id);
+        var category = await _unitOfWork.GetRepository<ExpenseCategory>().GetByIdAsync(id);
+        if (category == null)
+            return ApiResponse.Fail($"Expense category with ID {id} not found.");
+        if (!category.IsActive)
+            return ApiResponse.Fail($"Expense category with ID {id} is already inactive.");
 
-        if (entity == null || !entity.IsActive)
-        {
-            return ApiResponse.Fail($"Expense category with ID {id} not found or is already inactive.");
-        }
+        var claims = await _unitOfWork.GetRepository<ExpenseClaim>().AsQueryable().FirstOrDefaultAsync(x => x.ExpenseCategoryId == id && x.IsActive);
+        if (claims != null)
+            return ApiResponse.Fail("This category cannot be deleted because it is associated with an active expense claim.");
 
-        entity.IsActive = false;
-        entity.UpdatedAt = DateTime.UtcNow;
-        entity.UpdatedBy = _appSession.UserName ?? "Anonymous";
+        category.IsActive = false;
+        category.UpdatedAt = DateTime.UtcNow;
+        category.UpdatedBy = _appSession.UserName ?? "Anonymous";
 
-        repo.Update(entity);
+        _unitOfWork.GetRepository<ExpenseCategory>().Update(category);
         await _unitOfWork.CompleteAsync();
 
         return ApiResponse.Ok("Expense category successfully deleted.");

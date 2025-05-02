@@ -135,14 +135,10 @@ public class ExpenseClaimService : IExpenseClaimService
             .FirstOrDefaultAsync(x => x.Id == id && x.IsActive);
 
         if (claim == null || !claim.IsActive)
-        {
             return ApiResponse.Fail($"Expense claim with ID {id} not found or is inactive.");
-        }
 
         if (claim.Status != ExpenseStatus.Pending)
-        {
             return ApiResponse.Fail("Only pending claims can be approved.");
-        }
 
         claim.Status = ExpenseStatus.Approved;
         claim.ApprovedOrRejectedDate = DateTime.UtcNow;
@@ -167,21 +163,15 @@ public class ExpenseClaimService : IExpenseClaimService
 
         return ApiResponse.Ok("Claim approved and EFT simulation logged.");
     }
-
-
     public async Task<ApiResponse> RejectAsync(long id, string reason)
     {
         var claim = await _unitOfWork.GetRepository<ExpenseClaim>().GetByIdAsync(id);
         if (claim == null || !claim.IsActive)
-        {
             return ApiResponse.Fail($"Expense claim with ID {id} not found or is inactive.");
-        }
 
         if (claim.Status != ExpenseStatus.Pending)
-        {
             return ApiResponse.Fail("Only pending claims can be rejected.");
-        }
-
+        
         claim.Status = ExpenseStatus.Rejected;
         claim.RejectReason = reason;
         claim.ApprovedOrRejectedDate = DateTime.UtcNow;
@@ -194,17 +184,28 @@ public class ExpenseClaimService : IExpenseClaimService
         return ApiResponse.Ok("Expense claim rejected.");
     }
 
-    public async Task<ApiResponse<List<ExpenseClaimResponse>>> GetByUserIdAsync()
+    public async Task<ApiResponse<List<ExpenseClaimResponse>>> GetClaimsByFilterAsync(ExpenseClaimFilterRequest filter)
     {
         var currentUserId = _appSession.UserId;
-
-        var claims = await _unitOfWork.GetRepository<ExpenseClaim>().AsQueryable()
+        var query = _unitOfWork.GetRepository<ExpenseClaim>().AsQueryable()
             .Include(x => x.ExpenseCategory)
-            .Where(x => x.UserId == currentUserId && x.IsActive)
-            .ToListAsync();
+            .Where(x => x.UserId == currentUserId && x.IsActive);
+        if (filter.Status != null)
+            query = query.Where(x => x.Status == filter.Status);
+        if (filter.StartDate != null)
+            query = query.Where(x => x.RequestDate >= filter.StartDate.Value.ToUniversalTime());
+        if (filter.EndDate != null)
+            query = query.Where(x => x.RequestDate <= filter.EndDate.Value.ToUniversalTime());
+        if (filter.ExpenseCategoryId != null)
+            query = query.Where(x => x.ExpenseCategoryId == filter.ExpenseCategoryId);
+        if (filter.MinAmount != null)
+            query = query.Where(x => x.Amount >= filter.MinAmount);
+        if (filter.MaxAmount != null)
+            query = query.Where(x => x.Amount <= filter.MaxAmount);
 
+        var claims = await query.ToListAsync();
         if (claims == null || claims.Count == 0)
-            return ApiResponse<List<ExpenseClaimResponse>>.Fail("You have no expense claims.");
+            return ApiResponse<List<ExpenseClaimResponse>>.Fail("No expense claims found.");
 
         var request = _httpContextAccessor.HttpContext?.Request;
         var baseUrl = request is not null ? $"{request.Scheme}://{request.Host}" : string.Empty;
@@ -217,7 +218,6 @@ public class ExpenseClaimService : IExpenseClaimService
                 return x;
             }).ToList();
 
-        return ApiResponse<List<ExpenseClaimResponse>>.Ok(mapped);
+        return ApiResponse<List<ExpenseClaimResponse>>.Ok(mapped);   
     }
-
 }

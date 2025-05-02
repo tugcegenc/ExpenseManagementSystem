@@ -14,6 +14,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
             .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.ToString()));
         CreateMap<CreateUserRequest, User>();
+        CreateMap<UpdateUserRequest, User>();
 
         CreateMap<ExpenseCategory, ExpenseCategoryResponse>();
         CreateMap<CreateExpenseCategoryRequest, ExpenseCategory>();
@@ -31,7 +32,8 @@ public class MappingProfile : Profile
         CreateMap<UpdateExpenseClaimRequest, ExpenseClaim>()
             .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
 
-        
+        CreateMap<ExpenseClaimFilterRequest, ExpenseClaim>();
+         
         CreateMap<EftSimulationLog, EftSimulationLogResponse>()
             .ForMember(dest => dest.ReceiverName, opt => opt.MapFrom(src => $"{src.ExpenseClaim.User.FirstName} {src.ExpenseClaim.User.LastName}"));
        

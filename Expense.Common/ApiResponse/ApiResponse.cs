@@ -42,6 +42,7 @@ public class ApiResponse
 {
     public bool Success { get; set; }
     public string Message { get; set; } = null!;
+    public List<string>? Errors { get; set; }
     public DateTime ServerDate { get; set; } = DateTime.UtcNow;
     public Guid ReferenceNo { get; set; } = Guid.NewGuid();
 
@@ -55,6 +56,10 @@ public class ApiResponse
     public static ApiResponse Fail(string message)
     {
         return new ApiResponse { Success = false, Message = message };
+    }
+     public static ApiResponse Fail(string message, List<string> errors)
+    {
+        return new ApiResponse { Success = false, Message = message, Errors = errors };
     }
 
     public override string ToString() => JsonSerializer.Serialize(this);

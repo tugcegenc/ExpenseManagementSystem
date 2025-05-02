@@ -1,4 +1,5 @@
 using Expense.Application.Services.Interfaces;
+using Expense.Common.ApiResponse;
 using Expense.Domain.Enums;
 using Expense.Schema.Requests;
 using Microsoft.AspNetCore.Authorization;
@@ -28,29 +29,34 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
+        if (id <= 0)
+            return BadRequest(ApiResponse.Fail("Invalid ID."));
         var result = await _userService.GetByIdAsync(id);
         return Ok(result);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> Create([FromQuery] CreateUserRequest request)
     {
         var result = await _userService.CreateAsync(request);
         return Ok(result);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(long id, [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> Update(long id, [FromQuery] UpdateUserRequest request)
     {
-        var result = _userService.UpdateAsync(id,request);
+        if (id <= 0)
+            return BadRequest(ApiResponse.Fail("Invalid ID."));
+        var result = await _userService.UpdateAsync(id,request);
         return Ok(result);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(long id)
     {
-        var result = _userService.DeleteAsync(id);
+        if (id <= 0)
+            return BadRequest(ApiResponse.Fail("Invalid ID."));
+        var result =await _userService.DeleteAsync(id);
         return Ok(result);
     }
-    
 }

@@ -20,7 +20,6 @@ public class ReportsController : ControllerBase
     
     [Authorize(Roles = "Admin")]
     [HttpGet("MyExpenses")]
-    //[Authorize(Roles = "Personnel")]
     public async Task<IActionResult> GetMyExpenses([FromQuery] long userId)
     {
         var result = await _reportService.GetMyExpensesAsync(userId);
