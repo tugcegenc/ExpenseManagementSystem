@@ -1,7 +1,7 @@
 using FluentValidation;
 using Expense.Schema.Requests;
 
-public class ExpenseCategoryRequestValidator : AbstractValidator<CreateExpenseCategoryRequest>
+public class ExpenseCategoryRequestValidator : AbstractValidator<ExpenseCategoryRequest>
 {
     public ExpenseCategoryRequestValidator()
     {

@@ -37,7 +37,7 @@ public class ExpenseCategoryController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPost]
-    public async Task<IActionResult> Create([FromQuery] CreateExpenseCategoryRequest request)
+    public async Task<IActionResult> Create([FromQuery] ExpenseCategoryRequest request)
     {
         var result = await _expenseCategoryService.CreateAsync(request);
         return Ok(result);
@@ -45,7 +45,7 @@ public class ExpenseCategoryController : ControllerBase
 
     [Authorize(Roles = "Admin")]
     [HttpPut]
-    public async Task<IActionResult> Update(long id, [FromQuery] UpdateExpenseCategoryRequest request)
+    public async Task<IActionResult> Update(long id, [FromQuery] ExpenseCategoryRequest request)
     {
         if (id <= 0)
             return BadRequest("Invalid ID.");

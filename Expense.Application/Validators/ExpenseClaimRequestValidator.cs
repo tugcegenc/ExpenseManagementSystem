@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Expense.Application.Validators;
 
-public class ExpenseClaimRequestValidator : AbstractValidator<CreateExpenseClaimRequest>
+public class ExpenseClaimRequestValidator : AbstractValidator<ExpenseClaimRequest>
 {
     public ExpenseClaimRequestValidator()
     {

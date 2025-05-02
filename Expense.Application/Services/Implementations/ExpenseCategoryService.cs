@@ -42,7 +42,7 @@ public class ExpenseCategoryService : IExpenseCategoryService
         return ApiResponse<ExpenseCategoryResponse>.Ok(mapped);
     }
 
-    public async Task<ApiResponse<ExpenseCategoryResponse>> CreateAsync(CreateExpenseCategoryRequest request)
+    public async Task<ApiResponse<ExpenseCategoryResponse>> CreateAsync(ExpenseCategoryRequest request)
     {
         var entity = _mapper.Map<ExpenseCategory>(request);
         entity.CreatedAt = DateTime.UtcNow;
@@ -55,7 +55,7 @@ public class ExpenseCategoryService : IExpenseCategoryService
         return ApiResponse<ExpenseCategoryResponse>.Ok(response, "Expense category successfully created.");
     }
 
-    public async Task<ApiResponse> UpdateAsync(long id, UpdateExpenseCategoryRequest request)
+    public async Task<ApiResponse> UpdateAsync(long id, ExpenseCategoryRequest request)
     {
         var category = _unitOfWork.GetRepository<ExpenseCategory>();
         var entity = await category.GetByIdAsync(id);

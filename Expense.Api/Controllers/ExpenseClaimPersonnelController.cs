@@ -25,14 +25,14 @@ public class ExpenseClaimPersonnelController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromQuery] CreateExpenseClaimRequest request)   
+    public async Task<IActionResult> Create([FromQuery] ExpenseClaimRequest request)   
     {
         var result = await _expenseClaimService.CreateAsync(request);
         return Ok(result);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(long id, [FromQuery] UpdateExpenseClaimRequest request)
+    public async Task<IActionResult> Update(long id, [FromQuery] ExpenseClaimRequest request)
     {
         if (id <= 0)
             return BadRequest("Invalid ID.");

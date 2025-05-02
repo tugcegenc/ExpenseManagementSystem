@@ -47,7 +47,7 @@ public class ExpenseClaimService : IExpenseClaimService
         return ApiResponse<ExpenseClaimResponse>.Ok(mapped);
     }
 
-    public async Task<ApiResponse<ExpenseClaimResponse>> CreateAsync(CreateExpenseClaimRequest request)
+    public async Task<ApiResponse<ExpenseClaimResponse>> CreateAsync(ExpenseClaimRequest request)
     {
         var claim = _mapper.Map<ExpenseClaim>(request);
 
@@ -83,7 +83,7 @@ public class ExpenseClaimService : IExpenseClaimService
 
         return ApiResponse<ExpenseClaimResponse>.Ok(response, "Expense claim successfully created.");
     }
-    public async Task<ApiResponse> UpdateAsync(long id, UpdateExpenseClaimRequest request)
+    public async Task<ApiResponse> UpdateAsync(long id, ExpenseClaimRequest request)
     {
         var claim = await _unitOfWork.GetRepository<ExpenseClaim>().GetByIdAsync(id);
         if (claim == null || !claim.IsActive)
@@ -92,8 +92,19 @@ public class ExpenseClaimService : IExpenseClaimService
         if (claim.UserId != _appSession.UserId)
             return ApiResponse.Fail("You are not authorized to access or modify this expense claim.");
 
-        if (claim.Status != ExpenseStatus.Approved || claim.Status != ExpenseStatus.Rejected)
+        if (claim.Status == ExpenseStatus.Approved || claim.Status == ExpenseStatus.Rejected)
             return ApiResponse.Fail("Requests that have been approved or rejected cannot be updated.");
+        
+        if (claim.ExpenseCategoryId != request.ExpenseCategoryId)
+        {
+            var category = await _unitOfWork.GetRepository<ExpenseCategory>()
+                    .AsQueryable().FirstOrDefaultAsync(x => x.Id == request.ExpenseCategoryId && x.IsActive);
+    
+            if (category == null)
+                return ApiResponse.Fail("Expense category not found or is inactive.");
+
+            claim.ExpenseCategoryId = request.ExpenseCategoryId;
+        }
 
         var mapped = _mapper.Map(request, claim);
 
@@ -116,7 +127,7 @@ public class ExpenseClaimService : IExpenseClaimService
         if (claim.UserId != _appSession.UserId)
             return ApiResponse.Fail("You are not authorized to access or modify this expense claim.");
 
-        if (claim.Status != ExpenseStatus.Approved || claim.Status != ExpenseStatus.Rejected)
+        if (claim.Status == ExpenseStatus.Approved || claim.Status == ExpenseStatus.Rejected)
             return ApiResponse.Fail("Requests that have been approved or rejected cannot be deleted.");
 
         claim.IsActive = false;

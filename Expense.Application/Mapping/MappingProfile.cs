@@ -17,21 +17,17 @@ public class MappingProfile : Profile
         CreateMap<UpdateUserRequest, User>();
 
         CreateMap<ExpenseCategory, ExpenseCategoryResponse>();
-        CreateMap<CreateExpenseCategoryRequest, ExpenseCategory>();
+        CreateMap<ExpenseCategoryRequest, ExpenseCategory>();
 
         CreateMap<ExpenseClaim, ExpenseClaimResponse>()
             .ForMember(dest => dest.PaymentMethod, opt => opt.MapFrom(src => src.PaymentMethod.ToString()))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.ExpenseCategory.Name));
 
-        CreateMap<CreateExpenseClaimRequest, ExpenseClaim>()
+        CreateMap<ExpenseClaimRequest, ExpenseClaim>()
             .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(_ => ExpenseStatus.Pending));
         
-
-        CreateMap<UpdateExpenseClaimRequest, ExpenseClaim>()
-            .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
-
         CreateMap<ExpenseClaimFilterRequest, ExpenseClaim>();
          
         CreateMap<EftSimulationLog, EftSimulationLogResponse>()
