@@ -2,6 +2,7 @@ using AutoMapper;
 using Expense.Application.Services.Interfaces;
 using Expense.Common.ApiResponse;
 using Expense.Common.Helpers;
+using Expense.Common.Session;
 using Expense.Domain.Entities;
 using Expense.Domain.Interfaces;
 using Expense.Schema.Requests;

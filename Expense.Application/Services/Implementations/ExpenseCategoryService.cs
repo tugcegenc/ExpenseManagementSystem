@@ -1,6 +1,7 @@
 using AutoMapper;
 using Expense.Application.Services.Interfaces;
 using Expense.Common.ApiResponse;
+using Expense.Common.Session;
 using Expense.Domain.Entities;
 using Expense.Domain.Enums;
 using Expense.Domain.Interfaces;

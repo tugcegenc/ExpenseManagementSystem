@@ -1,3 +1,4 @@
+using Expense.Common.Session;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +23,7 @@ namespace Expense.Infrastructure.Context
             var optionsBuilder = new DbContextOptionsBuilder<ExpenseDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
 
-            return new ExpenseDbContext(optionsBuilder.Options);
+            return new ExpenseDbContext(optionsBuilder.Options, null);
         }
     }
 }

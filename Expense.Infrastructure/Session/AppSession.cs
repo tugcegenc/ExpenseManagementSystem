@@ -1,8 +1,7 @@
 using System.Security.Claims;
-using Expense.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 
-namespace Expense.Application.Services.Implementations;
+namespace Expense.Common.Session;
 
 public class AppSession : IAppSession
 {
@@ -32,5 +31,3 @@ public class AppSession : IAppSession
 
     public string? Role => _contextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;
 }
-
-

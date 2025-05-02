@@ -8,6 +8,7 @@ using Expense.Application.Services.Implementations;
 using Expense.Application.Services.Interfaces;
 using Expense.Application.Validators;
 using Expense.Common.Configurations;
+using Expense.Common.Session;
 using Expense.Domain.Interfaces;
 using Expense.Domain.Interfaces.Repositories;
 using Expense.Infrastructure.Context;
