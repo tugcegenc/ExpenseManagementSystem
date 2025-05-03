@@ -1,10 +1,6 @@
 using System.Text.Json;
 
 namespace Expense.Common.ApiResponse;
-
-/// <summary>
-/// Generic ApiResponse wrapper for data and status
-/// </summary>
 public class ApiResponse<T>
 {
     public bool Success { get; set; }
@@ -13,6 +9,7 @@ public class ApiResponse<T>
     public List<string>? Errors { get; set; }
     public DateTime ServerDate { get; set; } = DateTime.UtcNow;
     public Guid ReferenceNo { get; set; } = Guid.NewGuid();
+    public string? Source { get; set; }
 
     private ApiResponse() { }
 
@@ -21,9 +18,9 @@ public class ApiResponse<T>
         return new ApiResponse<T> { Success = true, Message = message };
     }
 
-    public static ApiResponse<T> Ok(T data, string? message = null)
+    public static ApiResponse<T> Ok(T data, string? message = null, string? source = null)
     {
-        return new ApiResponse<T> { Success = true, Message = message ?? "Success", Data = data };
+        return new ApiResponse<T> { Success = true, Message = message ?? "Success", Data = data ,Source = source};
     }
 
     public static ApiResponse<T> Fail(string message)

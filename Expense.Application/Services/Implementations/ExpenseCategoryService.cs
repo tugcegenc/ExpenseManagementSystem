@@ -3,7 +3,6 @@ using Expense.Application.Services.Interfaces;
 using Expense.Common.ApiResponse;
 using Expense.Common.Session;
 using Expense.Domain.Entities;
-using Expense.Domain.Enums;
 using Expense.Domain.Interfaces;
 using Expense.Schema.Requests;
 using Expense.Schema.Responses;
@@ -16,23 +15,35 @@ public class ExpenseCategoryService : IExpenseCategoryService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IAppSession _appSession;
-    public ExpenseCategoryService(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession)
+    private readonly IRedisCacheService _redisCacheService;
+    public ExpenseCategoryService(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession, IRedisCacheService redisCacheService)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _appSession = appSession;
+        _redisCacheService = redisCacheService;
     }
     public async Task<ApiResponse<List<ExpenseCategoryResponse>>> GetAllAsync()
     {
-        var categories = await _unitOfWork.GetRepository<ExpenseCategory>().GetAllAsync();
-        var activeCategories = categories.Where(x => x.IsActive).ToList();
+        var cacheData = await _redisCacheService.GetAsync<List<ExpenseCategoryResponse>>("expenseCategories");
+        if (cacheData != null)
+            return ApiResponse<List<ExpenseCategoryResponse>>.Ok(cacheData, "Success", "cache");
 
-        var mapped = _mapper.Map<List<ExpenseCategoryResponse>>(activeCategories);
-        return ApiResponse<List<ExpenseCategoryResponse>>.Ok(mapped);
+        var categories = await _unitOfWork.GetRepository<ExpenseCategory>().AsQueryable().Where(x => x.IsActive).ToListAsync();
+        var mapped = _mapper.Map<List<ExpenseCategoryResponse>>(categories);
+
+        await _redisCacheService.SetAsync("expenseCategories", mapped, TimeSpan.FromMinutes(30), TimeSpan.FromHours(3));
+
+        return ApiResponse<List<ExpenseCategoryResponse>>.Ok(mapped, "Success", "database");
     }
 
     public async Task<ApiResponse<ExpenseCategoryResponse>> GetByIdAsync(long id)
     {
+        var cacheKey = $"expenseCategory-{id}";
+        var cacheData = await _redisCacheService.GetAsync<ExpenseCategoryResponse>(cacheKey);
+        if (cacheData != null)
+            return ApiResponse<ExpenseCategoryResponse>.Ok(cacheData, "Success", "cache");
+
         var category = await _unitOfWork.GetRepository<ExpenseCategory>().GetByIdAsync(id);
         if (category == null || !category.IsActive)
         {
@@ -40,17 +51,23 @@ public class ExpenseCategoryService : IExpenseCategoryService
         }
 
         var mapped = _mapper.Map<ExpenseCategoryResponse>(category);
-        return ApiResponse<ExpenseCategoryResponse>.Ok(mapped);
+
+        await _redisCacheService.SetAsync(cacheKey, mapped, TimeSpan.FromMinutes(30), TimeSpan.FromHours(3));
+
+
+        return ApiResponse<ExpenseCategoryResponse>.Ok(mapped, "Success", "database");
     }
 
     public async Task<ApiResponse<ExpenseCategoryResponse>> CreateAsync(ExpenseCategoryRequest request)
     {
         var entity = _mapper.Map<ExpenseCategory>(request);
         entity.CreatedAt = DateTime.UtcNow;
-        entity.CreatedBy = _appSession.UserName ?? "Anonymous"; 
+        entity.CreatedBy = _appSession.UserName ?? "Anonymous";
 
         await _unitOfWork.GetRepository<ExpenseCategory>().AddAsync(entity);
         await _unitOfWork.CompleteAsync();
+
+        await _redisCacheService.RemoveAsync("expenseCategories");
 
         var response = _mapper.Map<ExpenseCategoryResponse>(entity);
         return ApiResponse<ExpenseCategoryResponse>.Ok(response, "Expense category successfully created.");
@@ -69,10 +86,14 @@ public class ExpenseCategoryService : IExpenseCategoryService
         entity.Name = request.Name;
         entity.Description = request.Description;
         entity.UpdatedAt = DateTime.UtcNow;
-        entity.UpdatedBy = _appSession.UserName ?? "Anonymous"; 
+        entity.UpdatedBy = _appSession.UserName ?? "Anonymous";
 
         category.Update(entity);
         await _unitOfWork.CompleteAsync();
+
+        await _redisCacheService.RemoveAsync("expenseCategories");
+        await _redisCacheService.RemoveAsync($"expenseCategory-{id}");
+
 
         return ApiResponse.Ok("Expense category successfully updated.");
     }
@@ -95,6 +116,9 @@ public class ExpenseCategoryService : IExpenseCategoryService
 
         _unitOfWork.GetRepository<ExpenseCategory>().Update(category);
         await _unitOfWork.CompleteAsync();
+
+        await _redisCacheService.RemoveAsync("expenseCategories");
+        await _redisCacheService.RemoveAsync($"expenseCategory-{id}");
 
         return ApiResponse.Ok("Expense category successfully deleted.");
     }

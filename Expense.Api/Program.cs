@@ -1,5 +1,3 @@
-
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
 using Expense.Api.Middleware;
@@ -44,6 +42,7 @@ builder.Services.AddScoped<IAppSession, AppSession>();
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 
 
 // JwtConfig  
@@ -100,6 +99,12 @@ builder.Services.AddSingleton<IConnectionFactory>(new ConnectionFactory
 });
 
 builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
+
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
