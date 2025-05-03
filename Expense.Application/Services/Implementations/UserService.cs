@@ -1,7 +1,9 @@
+using System.Text.Json;
 using AutoMapper;
 using Expense.Application.Services.Interfaces;
 using Expense.Common.ApiResponse;
 using Expense.Common.Helpers;
+using Expense.Common.RabbitMQ;
 using Expense.Common.Session;
 using Expense.Domain.Entities;
 using Expense.Domain.Interfaces;
@@ -16,12 +18,14 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IAppSession _appSession;
+    private readonly IRabbitMqPublisher _rabbitMqPublisher;
 
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession)
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IAppSession appSession, IRabbitMqPublisher rabbitMqPublisher)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
         _appSession = appSession;
+        _rabbitMqPublisher = rabbitMqPublisher;
     }
 
     public async Task<ApiResponse<List<UserResponse>>> GetAllAsync()
@@ -73,7 +77,6 @@ public class UserService : IUserService
         var password = PasswordGenerator.GeneratePassword(8);
         var salt = PasswordGenerator.GeneratePassword(30);
         var passwordHash = PasswordGenerator.CreateSHA256(password, salt);
-        
 
         user.PasswordHash = passwordHash;
         user.PasswordSalt = salt;
@@ -83,9 +86,23 @@ public class UserService : IUserService
 
         await _unitOfWork.GetRepository<User>().AddAsync(user);
         await _unitOfWork.CompleteAsync();
-        
-        var log = $"Username: {user.UserName}, Password: {password}";
-        await File.AppendAllTextAsync("GeneratedPasswords.txt", log + Environment.NewLine);
+
+        var userCreatedMessage = new UserCreatedMessage
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+            UserPassword = password,
+            FullName = $"{user.FirstName} {user.LastName}"
+        };
+        try
+        {
+            var emailMessage = EmailContentBuilder.BuildUserCreatedMessage(userCreatedMessage);
+            _rabbitMqPublisher.Publish("email-queue", JsonSerializer.Serialize(emailMessage));
+        }
+        catch
+        {
+            return ApiResponse<UserResponse>.Fail("User registration failed: Email could not be sent.");
+        }
 
         var response = _mapper.Map<UserResponse>(user);
         return ApiResponse<UserResponse>.Ok(response);

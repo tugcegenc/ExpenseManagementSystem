@@ -26,7 +26,7 @@ public class ExpenseDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ExpenseDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
 
-        // Seed ExpenseCtegory
+        // Seed ExpenseCategory
         modelBuilder.Entity<ExpenseCategory>().HasData(
             new ExpenseCategory
             {

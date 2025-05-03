@@ -9,7 +9,6 @@ namespace Expense.Infrastructure.Context
     {
         public ExpenseDbContext CreateDbContext(string[] args)
         {
-            // Uygulama kök dizinini ve appsettings.json'u bul
             var basePath = Directory.GetCurrentDirectory();
 
             var configuration = new ConfigurationBuilder()
@@ -17,7 +16,6 @@ namespace Expense.Infrastructure.Context
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
-            // appsettings.json içindeki connection string'i al
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             var optionsBuilder = new DbContextOptionsBuilder<ExpenseDbContext>();

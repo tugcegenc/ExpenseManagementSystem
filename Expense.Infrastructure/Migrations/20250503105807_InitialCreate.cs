@@ -18,6 +18,27 @@ namespace Expense.Infrastructure.Migrations
                 name: "dbo");
 
             migrationBuilder.CreateTable(
+                name: "AuditLog",
+                schema: "dbo",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    Role = table.Column<string>(type: "text", nullable: false),
+                    Action = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    EntityId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    EntityName = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    OriginalValues = table.Column<string>(type: "text", nullable: true),
+                    ChangedValues = table.Column<string>(type: "text", nullable: true),
+                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AuditLog", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ExpenseCategories",
                 schema: "dbo",
                 columns: table => new
@@ -238,11 +259,22 @@ namespace Expense.Infrastructure.Migrations
                 table: "Users",
                 column: "IdentityNumber",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserName",
+                schema: "dbo",
+                table: "Users",
+                column: "UserName",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AuditLog",
+                schema: "dbo");
+
             migrationBuilder.DropTable(
                 name: "EftSimulationLogs",
                 schema: "dbo");
