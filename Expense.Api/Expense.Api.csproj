@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Expense.Application\Expense.Application.csproj" />
+    <ProjectReference Include="..\Expense.Infrastructure\Expense.Infrastructure.csproj" />
     <ProjectReference Include="..\Expense.Schema\Expense.Schema.csproj" />
     <ProjectReference Include="..\Expense.Common\Expense.Common.csproj" />
   </ItemGroup>

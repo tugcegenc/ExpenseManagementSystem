@@ -1,4 +1,4 @@
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Services;
 using Expense.Schema.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

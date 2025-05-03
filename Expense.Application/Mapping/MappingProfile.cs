@@ -25,7 +25,7 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.ExpenseCategory.Name));
 
         CreateMap<ExpenseClaimRequest, ExpenseClaim>()
-            .ForMember(dest => dest.RequestDate, opt => opt.MapFrom(_ => DateTime.UtcNow))
+            .ForMember(dest => dest.ClaimDate, opt => opt.MapFrom(_ => DateTime.UtcNow))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(_ => ExpenseStatus.Pending));
         
         CreateMap<ExpenseClaimFilterRequest, ExpenseClaim>();

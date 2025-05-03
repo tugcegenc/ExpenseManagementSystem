@@ -12,7 +12,7 @@ public class ExpenseClaim : BaseEntity
     public long ExpenseCategoryId { get; set; }
     public ExpenseCategory ExpenseCategory { get; set; }
     public decimal Amount { get; set; }
-    public DateTime RequestDate { get; set; } 
+    public DateTime ClaimDate { get; set; }
     public string Description { get; set; }
     public PaymentMethod PaymentMethod { get; set; }
     public PaymentStatus PaymentStatus { get; set; }

@@ -1,6 +1,4 @@
-using Expense.Application.Services.Implementations;
-using Expense.Application.Services.Interfaces;
-using Expense.Schema.Requests;
+using Expense.Application.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +20,7 @@ public class ReportsController : ControllerBase
     [HttpGet("MyExpenses")]
     public async Task<IActionResult> GetMyExpenses([FromQuery] long userId)
     {
-        var result = await _reportService.GetMyExpensesAsync(userId);
+        var result = await _reportService.GetPersonnelExpensesAsync(userId);
         return Ok(result);
     }
     [Authorize(Roles = "Admin")]

@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Services;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace Expense.Application.Services.Implementations;
+namespace Expense.Infrastructure.Services;
 
 public class RedisCacheService : IRedisCacheService
 {

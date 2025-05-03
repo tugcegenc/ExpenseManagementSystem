@@ -1,8 +1,7 @@
-using Expense.Domain.Interfaces;
-using Expense.Domain.Interfaces.Repositories;
 using Expense.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Expense.Application.Services.Interfaces.Repositories;
 
 namespace Expense.Infrastructure.Repositories
 {

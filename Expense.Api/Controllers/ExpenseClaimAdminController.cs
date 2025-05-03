@@ -1,4 +1,4 @@
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +11,7 @@ public class ExpenseClaimAdminController : ControllerBase
 {
     private readonly IExpenseClaimService _expenseClaimService;
 
-    public ExpenseClaimAdminController
-
-(IExpenseClaimService expenseClaimService)
+    public ExpenseClaimAdminController(IExpenseClaimService expenseClaimService)
     {
         _expenseClaimService = expenseClaimService;
     }

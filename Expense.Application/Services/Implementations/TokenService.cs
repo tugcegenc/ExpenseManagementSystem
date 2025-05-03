@@ -2,7 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Infrastucture;
 using Expense.Common.Configurations;
 using Expense.Domain.Entities;
 using Expense.Schema.Responses;

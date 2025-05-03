@@ -1,7 +1,5 @@
-using Expense.Application.Services.Interfaces;
-using Expense.Common.ApiResponse;
+using Expense.Application.Services.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Expense.Application.Services.Implementations;
 

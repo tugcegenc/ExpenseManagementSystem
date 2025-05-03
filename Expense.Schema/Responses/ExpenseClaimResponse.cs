@@ -17,7 +17,7 @@ public class ExpenseClaimResponse : BaseResponse
     public string ReceiptFileUrl { get; set; }
     public ExpenseStatus Status { get; set; }
     public string? RejectReason { get; set; }
-    public DateTime RequestDate { get; set; }
+    public DateTime ClaimDate { get; set; }
     public DateTime? ApprovedOrRejectedDate { get; set; }
     
     [JsonIgnore]

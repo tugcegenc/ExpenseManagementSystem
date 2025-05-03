@@ -1,12 +1,12 @@
 using System.Text.Json;
 using AutoMapper;
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Infrastucture;
+using Expense.Application.Services.Interfaces.Services;
+using Expense.Application.Services.Interfaces.Sessions;
 using Expense.Common.ApiResponse;
 using Expense.Common.Helpers;
 using Expense.Common.RabbitMQ;
-using Expense.Common.Session;
 using Expense.Domain.Entities;
-using Expense.Domain.Interfaces;
 using Expense.Schema.Requests;
 using Expense.Schema.Responses;
 using Microsoft.EntityFrameworkCore;

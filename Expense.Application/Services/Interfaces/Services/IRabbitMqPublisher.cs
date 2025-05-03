@@ -1,4 +1,4 @@
-namespace Expense.Application.Services.Interfaces;
+namespace Expense.Application.Services.Interfaces.Services;
 
 public interface IRabbitMqPublisher
 {

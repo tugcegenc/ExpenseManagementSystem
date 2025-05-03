@@ -1,4 +1,4 @@
-namespace Expense.Common.Session;
+namespace Expense.Application.Services.Interfaces.Sessions;
 public interface IAppSession
 {
     public long? UserId { get; }

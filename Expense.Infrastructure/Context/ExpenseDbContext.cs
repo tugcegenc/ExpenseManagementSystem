@@ -1,4 +1,4 @@
-using Expense.Common.Session;
+using Expense.Application.Services.Interfaces.Sessions;
 using Expense.Domain.Base;
 using Expense.Domain.Entities;
 using Expense.Domain.Enums;

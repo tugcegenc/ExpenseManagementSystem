@@ -1,8 +1,9 @@
 using AutoMapper;
 using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Infrastucture;
+using Expense.Application.Services.Interfaces.Services;
 using Expense.Common.ApiResponse;
 using Expense.Domain.Entities;
-using Expense.Domain.Interfaces;
 using Expense.Schema.Responses;
 using Microsoft.EntityFrameworkCore;
 

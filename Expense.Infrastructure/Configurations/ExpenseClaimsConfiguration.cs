@@ -12,7 +12,7 @@ public class ExpenseClaimConfiguration : IEntityTypeConfiguration<ExpenseClaim>
               builder.Property(e => e.Id).UseIdentityColumn();
 
               builder.Property(e => e.Amount).IsRequired().HasColumnType("decimal(18,2)");
-              builder.Property(e => e.RequestDate).IsRequired();
+              builder.Property(e => e.ClaimDate).IsRequired();
               builder.Property(e => e.Description).IsRequired().HasMaxLength(500);
               builder.Property(e => e.ApprovedOrRejectedDate).IsRequired(false);
               builder.Property(e => e.RejectReason).HasMaxLength(250);

@@ -1,8 +1,8 @@
 using System.Text;
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Services;
 using RabbitMQ.Client;
 
-namespace Expense.Application.Services.Implementations;
+namespace Expense.Infrastructure.Services;
 
 public class RabbitMqPublisher : IRabbitMqPublisher
 {

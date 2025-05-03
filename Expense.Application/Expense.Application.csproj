@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Expense.Domain\Expense.Domain.csproj" />
-    <ProjectReference Include="..\Expense.Infrastructure\Expense.Infrastructure.csproj" />
     <ProjectReference Include="..\Expense.Schema\Expense.Schema.csproj" />
     <ProjectReference Include="..\Expense.Common\Expense.Common.csproj" />
   </ItemGroup>
@@ -11,6 +10,7 @@
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.8.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />

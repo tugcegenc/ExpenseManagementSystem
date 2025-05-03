@@ -1,5 +1,5 @@
-using Expense.Domain.Interfaces;
-using Expense.Domain.Interfaces.Repositories;
+using Expense.Application.Services.Interfaces.Infrastucture;
+using Expense.Application.Services.Interfaces.Repositories;
 using Expense.Infrastructure.Context;
 using Expense.Infrastructure.Repositories;
 

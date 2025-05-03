@@ -95,7 +95,7 @@ namespace Expense.Infrastructure.Migrations
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     ExpenseCategoryId = table.Column<long>(type: "bigint", nullable: false),
                     Amount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ClaimDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     PaymentMethod = table.Column<string>(type: "text", nullable: false),
                     PaymentStatus = table.Column<string>(type: "text", nullable: false),

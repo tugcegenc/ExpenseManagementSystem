@@ -1,9 +1,7 @@
-namespace Expense.Application.Services.Interfaces;
-
 using Expense.Common.ApiResponse;
-using Expense.Schema.Requests;
 using Expense.Schema.Responses;
 
+namespace Expense.Application.Services.Interfaces.Services;
 public interface IEftSimulationLogService
 {
     Task<ApiResponse<List<EftSimulationLogResponse>>> GetAllAsync();

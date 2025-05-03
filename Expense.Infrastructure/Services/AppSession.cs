@@ -1,7 +1,8 @@
 using System.Security.Claims;
+using Expense.Application.Services.Interfaces.Sessions;
 using Microsoft.AspNetCore.Http;
 
-namespace Expense.Common.Session;
+namespace Expense.Infrastructure.Services;
 
 public class AppSession : IAppSession
 {

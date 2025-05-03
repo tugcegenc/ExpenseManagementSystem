@@ -3,6 +3,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Expense.Domain\Expense.Domain.csproj" />
     <ProjectReference Include="..\Expense.Common\Expense.Common.csproj" />
+    <ProjectReference Include="..\Expense.Schema\Expense.Schema.csproj" />  
+    <ProjectReference Include="..\Expense.Application\Expense.Application.csproj" />
+
+
   </ItemGroup>
 
   <ItemGroup>

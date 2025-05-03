@@ -1,10 +1,10 @@
 using AutoMapper;
-using Expense.Application.Services.Interfaces;
+using Expense.Application.Services.Interfaces.Infrastucture;
+using Expense.Application.Services.Interfaces.Services;
+using Expense.Application.Services.Interfaces.Sessions;
 using Expense.Common.ApiResponse;
-using Expense.Common.Session;
 using Expense.Domain.Entities;
 using Expense.Domain.Enums;
-using Expense.Domain.Interfaces;
 using Expense.Schema.Requests;
 using Expense.Schema.Responses;
 using Microsoft.AspNetCore.Http;
@@ -55,7 +55,7 @@ public class ExpenseClaimService : IExpenseClaimService
         claim.UserId = _appSession.UserId ?? throw new Exception("User ID not found in session.");
         claim.CreatedBy = _appSession.UserName ?? "Anonymous";
         claim.Status = ExpenseStatus.Pending;
-        claim.RequestDate = DateTime.UtcNow;
+        claim.ClaimDate = DateTime.UtcNow;
         claim.CreatedAt = DateTime.UtcNow;
         claim.IsActive = true;
 
@@ -205,9 +205,9 @@ public class ExpenseClaimService : IExpenseClaimService
         if (filter.Status != null)
             query = query.Where(x => x.Status == filter.Status);
         if (filter.StartDate != null)
-            query = query.Where(x => x.RequestDate >= filter.StartDate.Value.ToUniversalTime());
+            query = query.Where(x => x.ClaimDate >= filter.StartDate.Value.ToUniversalTime());
         if (filter.EndDate != null)
-            query = query.Where(x => x.RequestDate <= filter.EndDate.Value.ToUniversalTime());
+            query = query.Where(x => x.ClaimDate <= filter.EndDate.Value.ToUniversalTime());
         if (filter.ExpenseCategoryId != null)
             query = query.Where(x => x.ExpenseCategoryId == filter.ExpenseCategoryId);
         if (filter.MinAmount != null)
