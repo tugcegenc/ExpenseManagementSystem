@@ -23,6 +23,8 @@ using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
 
 // PostgreSQL 
 builder.Services.AddDbContext<ExpenseDbContext>(options =>
@@ -42,8 +44,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAppSession, AppSession>();
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
+builder.Services.AddSingleton<DapperContext>();
+
 
 
 // JwtConfig  
@@ -158,7 +163,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles(); 
 
 app.UseRouting();

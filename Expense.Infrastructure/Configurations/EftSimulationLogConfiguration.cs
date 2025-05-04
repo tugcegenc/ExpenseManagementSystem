@@ -14,7 +14,7 @@ public class EftSimulationLogConfiguration : IEntityTypeConfiguration<EftSimulat
         builder.Property(e => e.Amount).IsRequired().HasColumnType("decimal(18,2)");
         builder.Property(e => e.SimulatedAt).IsRequired();
         builder.Property(e => e.IsSuccessful).IsRequired().HasDefaultValue(false);
-
+        
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired(false);
         builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(100);

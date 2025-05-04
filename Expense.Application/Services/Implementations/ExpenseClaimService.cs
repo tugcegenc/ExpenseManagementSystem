@@ -162,6 +162,7 @@ public class ExpenseClaimService : IExpenseClaimService
             ExpenseClaimId = claim.Id,
             Amount = claim.Amount,
             ReceiverName = $"{claim.User.FirstName} {claim.User.LastName}",
+            ReceiverIban = claim.User.IBAN,
             Description = claim.Description,
             SimulatedAt = DateTime.UtcNow,
             IsSuccessful = false,
