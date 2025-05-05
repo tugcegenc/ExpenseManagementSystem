@@ -7,7 +7,7 @@ namespace Expense.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
- [Authorize(Roles = "Personnel")]
+[Authorize(Roles = "Personnel")]
 public class ExpenseClaimPersonnelController : ControllerBase
 {
     private readonly IExpenseClaimService _expenseClaimService;
