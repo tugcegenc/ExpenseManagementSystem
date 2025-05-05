@@ -1,4 +1,3 @@
-using Expense.Application.Services.Interfaces;
 using Expense.Application.Services.Interfaces.Infrastucture;
 using Expense.Application.Services.Interfaces.Services;
 using Expense.Common.ApiResponse;
@@ -13,7 +12,6 @@ namespace Expense.Application.Services.Implementations;
 public class AuthService : IAuthService
 {
     private readonly ITokenService _tokenService;
-
     private readonly IUnitOfWork _unitOfWork;
 
     public AuthService(ITokenService tokenService, IUnitOfWork unitOfWork)
@@ -37,17 +35,38 @@ public class AuthService : IAuthService
         if (user.PasswordHash != passwordHash)
             return ApiResponse<AuthorizationResponse>.Fail("Invalid credentials");
 
-        var accessToken = _tokenService.CreateAccessToken(user);
+        var refreshTokenRepo = _unitOfWork.GetRepository<RefreshToken>();
+        var oldTokens = await refreshTokenRepo.AsQueryable()
+            .Where(t => t.UserId == user.Id && t.IsActive && !t.IsUsed && !t.IsRevoked)
+            .ToListAsync();
 
+        foreach (var oldToken in oldTokens)
+        {
+            oldToken.IsActive = false;
+            oldToken.IsRevoked = true;
+            oldToken.IsUsed = true;
+            oldToken.UpdatedAt = DateTime.UtcNow;
+            oldToken.UpdatedBy = user.UserName;
+            
+            refreshTokenRepo.Update(oldToken);
+        }
+        
+        var accessToken = _tokenService.CreateAccessToken(user);
         var refreshToken = _tokenService.CreateRefreshToken(user);
 
-        await _unitOfWork.GetRepository<RefreshToken>().AddAsync(refreshToken);
+        await refreshTokenRepo.AddAsync(refreshToken);
         await _unitOfWork.CompleteAsync();
 
         var response = new AuthorizationResponse
         {
             UserName = user.UserName,
-            Token = accessToken
+            Token = new TokenResponse
+            {
+                AccessToken = accessToken.AccessToken,
+                AccessTokenExpiration = accessToken.AccessTokenExpiration,
+                RefreshToken = refreshToken.Token,
+                RefreshTokenExpiration = refreshToken.ExpirationDate
+            }
         };
 
         return ApiResponse<AuthorizationResponse>.Ok(response);
@@ -75,7 +94,7 @@ public class AuthService : IAuthService
 
         _unitOfWork.GetRepository<RefreshToken>().Update(token);
 
-        var newToken = _tokenService.CreateAccessToken(token.User);
+        var newAccessToken = _tokenService.CreateAccessToken(token.User);
         var newRefreshToken = _tokenService.CreateRefreshToken(token.User);
 
         await _unitOfWork.GetRepository<RefreshToken>().AddAsync(newRefreshToken);
@@ -84,10 +103,15 @@ public class AuthService : IAuthService
         var response = new AuthorizationResponse
         {
             UserName = token.User.UserName,
-            Token = newToken,
+            Token = new TokenResponse
+            {
+                AccessToken = newAccessToken.AccessToken,
+                AccessTokenExpiration = newAccessToken.AccessTokenExpiration,
+                RefreshToken = newRefreshToken.Token,
+                RefreshTokenExpiration = newRefreshToken.ExpirationDate
+            }
         };
 
         return ApiResponse<AuthorizationResponse>.Ok(response);
     }
-
 }

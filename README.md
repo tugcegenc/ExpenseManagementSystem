@@ -1,6 +1,6 @@
 # Expense Management System
 
-The Expense Management System is a modular and layered .NET 9 Web API project developed as part of the **Papara Women in Tech Bootcamp**. It is designed for employees to manage expense requests and for managers to approve, reject, and report these requests.
+The Expense Management System is a modular and layered .NET 9 Web API project developed as part of the **Papara Women in Tech Bootcamp**. It is designed for personnel to manage expense requests and for managers to approve, reject, and report these requests.
 
 ---
 
@@ -20,7 +20,7 @@ The Expense Management System is a modular and layered .NET 9 Web API project de
 
 * User registration is handled by the admin, and passwords are sent via RabbitMQ email
 * Users log in with the password sent to them
-* Role-based access (Admin / Employee)
+* Role-based access (Admin / Personnel)
 * Expense request operations (add, update, delete, list)
 * Document upload (receipt/invoice), saved in the `wwwroot/uploads` folder
 * Caching category data with Redis
@@ -28,7 +28,7 @@ The Expense Management System is a modular and layered .NET 9 Web API project de
 * Filtered reports by date, status, category, and amount
 * High-performance queries using PostgreSQL functions and Dapper
 * Endpoint testing and organized grouping via Swagger
-* Two default users (admin and employee) are automatically added during system setup
+* Two default users (admin and personnel) are automatically added during system setup
 
 ---
 
@@ -39,7 +39,7 @@ When the database is first created, the system automatically adds the following 
 | Role      | Email                                         | Password  |
 | --------- | --------------------------------------------- | --------- |
 | Admin     | [admin@expense.com](mailto:admin@expense.com) | Admin123. |
-| Employee  | [user@expense.com](mailto:user@expense.com)   | User123.  |
+| Personnel | [user@expense.com](mailto:user@expense.com)   | User123.  |
 
 > After passwords are added to the database, new user passwords are sent via RabbitMQ email. These default users are added during system setup.
 
@@ -90,14 +90,11 @@ dotnet ef migrations add InitialCreate --project Expense.Infrastructure --startu
 
 ```bash
 dotnet run --project Expense.Api
-```
-
-```bash
 dotnet run --project Expense.EmailConsumer
 ```
 
 6. Access the Swagger interface:
-   `http://localhost:5000/swagger`
+   👉 `http://localhost:5000/swagger`
 
 ---
 
@@ -112,22 +109,21 @@ git clone https://github.com/yourusername/ExpenseManagementSystem.git
 ```
 
 2. Fill in the `appsettings.Local.json` file.
+
 3. Create a PostgreSQL database named `ExpenseDb`.
+
 4. Run the migration to set up the database and load seed data:
 
 ```bash
 dotnet ef database update --project Expense.Infrastructure --startup-project Expense.Api
 ```
 
-> This process will automatically add 2 default users (admin & employee).
+> This process will automatically add 2 default users (admin & personnel).
 
 5. Run the API and Email Consumer:
 
 ```bash
 dotnet run --project Expense.Api
-```
-
-```bash
 dotnet run --project Expense.EmailConsumer
 ```
 
@@ -136,20 +132,19 @@ dotnet run --project Expense.EmailConsumer
 ## 📖 Additional Information
 
 * Users log in with the password sent to them via email; password changes are not supported.
-* The system adds 2 default users (admin & employee) as seed data during the initial setup.
-* Passwords, email, SMTP, and queue information are stored in `appsettings.Local.json` and protected by .gitignore.
+* The system adds 2 default users (admin & personnel) as seed data during the initial setup.
+* Passwords, email, SMTP, and queue information are stored in `appsettings.Local.json` and protected by `.gitignore`.
 * Endpoints are grouped and role-based in the Swagger interface.
 * PostgreSQL functions and Dapper are used together for reporting.
 
 ---
 
 ## 📘 Additional Documentation and Previews
-For more detailed technical information, refer to the following files:
 
-📄 API Endpoint Documentation  
-Descriptions, parameters, authorization details, and functions of all API endpoints are listed here:  
-📂 docs/api-endpoints.md
+### 📄 [docs/api-endpoints.md](docs/api-endpoints.md)
 
-📸 Swagger UI Screenshots  
-Example images of the Swagger interface can be found in the following folder:  
-📂 docs/swagger-screenshots.pdf
+Descriptions, parameters, authorization details, and functions of all API endpoints are listed here.
+
+### 📸 [docs/swagger-screenshots.pdf](docs/swagger-screenshots.pdf)
+
+Example images of the Swagger interface can be found in the following folder.

@@ -39,6 +39,7 @@ public class TokenService : ITokenService
             expires: expiration,
             signingCredentials: creds
         );
+
         var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
         var refreshToken = CreateRefreshToken(user);
 

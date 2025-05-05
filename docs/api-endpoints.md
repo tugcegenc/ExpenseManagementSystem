@@ -213,4 +213,4 @@ Generates a new Access Token using a Refresh Token. Extends the token's validity
 * **RabbitMQ** is used for password delivery with message queue infrastructure.
 * **Dapper** is used for custom SQL reporting.
 * **SMTP (Gmail)** is used for automatic password notification emails.
-* Detailed Swagger test screenshots and usage scenarios are available in `docs/swagger-guide.pdf`.
+* Detailed Swagger test screenshots and usage scenarios are available in `docs/swagger-screenshots.pdf`.
