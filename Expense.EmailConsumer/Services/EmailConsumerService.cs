@@ -1,7 +1,9 @@
 using System.Net.Mail;
 using System.Text;
 using System.Text.Json;
+using Expense.Common.Configurations;
 using Expense.Common.RabbitMQ;
+using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -9,26 +11,31 @@ namespace Expense.EmailConsumer.Services;
 
 public class EmailConsumerService : IEmailConsumerService
 {
-    private readonly ConnectionFactory _connectionFactory;
+    private readonly IConfiguration _configuration;
+    private readonly RabbitMqConfig _rabbitMqSettings;
+    private readonly SmtpConfig _smtpSettings;
 
-    public EmailConsumerService()
+    public EmailConsumerService(IConfiguration configuration)
     {
-        _connectionFactory = new ConnectionFactory()
-        {
-            HostName = "localhost",
-            UserName = "guest",
-            Password = "guest"
-        };
+        _configuration = configuration;
+        _rabbitMqSettings = _configuration.GetSection("RabbitMqSettings").Get<RabbitMqConfig>();
+        _smtpSettings = _configuration.GetSection("Smtp").Get<SmtpConfig>();
     }
 
     public void Start()
     {
-        using var connection = _connectionFactory.CreateConnection();
+        var factory = new ConnectionFactory
+        {
+            HostName = _rabbitMqSettings.Host,
+            Port = _rabbitMqSettings.Port,
+            UserName = _rabbitMqSettings.Username,
+            Password = _rabbitMqSettings.Password
+        };
+
+        using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
-        var queueName = "email-queue";
-
-        channel.QueueDeclare(queue: queueName,
+        channel.QueueDeclare(queue: _rabbitMqSettings.QueueName,
                              durable: false,
                              exclusive: false,
                              autoDelete: false,
@@ -51,7 +58,6 @@ public class EmailConsumerService : IEmailConsumerService
                 }
 
                 await SendEmailAsync(emailMessage);
-
                 Console.WriteLine($"Email sent to: {emailMessage.To}");
             }
             catch (Exception ex)
@@ -60,8 +66,7 @@ public class EmailConsumerService : IEmailConsumerService
             }
         };
 
-        channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
-
+        channel.BasicConsume(queue: _rabbitMqSettings.QueueName, autoAck: true, consumer: consumer);
         Console.ReadLine();
     }
 
@@ -69,18 +74,19 @@ public class EmailConsumerService : IEmailConsumerService
     {
         var mail = new MailMessage
         {
-            From = new MailAddress("expensemanagementsystemm@gmail.com"),
+            From = new MailAddress(_smtpSettings.Username),
             Subject = message.Subject,
             Body = message.Body
         };
         mail.To.Add(message.To);
 
-        using var smtp = new SmtpClient("smtp.gmail.com", 587)
+        using var smtp = new SmtpClient(_smtpSettings.Host, _smtpSettings.Port)
         {
-            Credentials = new System.Net.NetworkCredential("expensemanagementsystemm@gmail.com", "zikq zoif chrd shbn"),
-            EnableSsl = true
+            Credentials = new System.Net.NetworkCredential(_smtpSettings.Username, _smtpSettings.Password),
+            EnableSsl = _smtpSettings.EnableSsl
         };
 
         await smtp.SendMailAsync(mail);
     }
 }
+

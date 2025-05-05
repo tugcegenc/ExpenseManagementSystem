@@ -25,6 +25,13 @@ using RabbitMQ.Client;
 var builder = WebApplication.CreateBuilder(args);
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
+// Configuration
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
 
 // PostgreSQL 
 builder.Services.AddDbContext<ExpenseDbContext>(options =>
@@ -153,7 +160,7 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // Middleware 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "local")
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
@@ -163,7 +170,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseStaticFiles(); 
 
 app.UseRouting();

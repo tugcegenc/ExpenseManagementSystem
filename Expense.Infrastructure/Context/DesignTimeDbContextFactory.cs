@@ -13,6 +13,8 @@ namespace Expense.Infrastructure.Context
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("appsettings.Local.json", optional: true)
+
                 .Build();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");

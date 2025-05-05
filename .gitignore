@@ -45,3 +45,6 @@ _ReSharper*/
 
 ## Test results
 TestResults/
+
+appsettings.Local.json
+

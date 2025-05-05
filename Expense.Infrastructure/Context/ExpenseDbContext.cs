@@ -26,59 +26,8 @@ public class ExpenseDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ExpenseDbContext).Assembly);
         base.OnModelCreating(modelBuilder);
 
-        // Seed ExpenseCategory
-        modelBuilder.Entity<ExpenseCategory>().HasData(
-            new ExpenseCategory
-            {
-                Id = 1,
-                Name = "Yemek",
-                Description = "Yemek giderleri",
-                CreatedAt = new DateTime(2025, 04, 19, 00, 00, 00, DateTimeKind.Utc),
-                CreatedBy = "seed",
-                IsActive = true
-            },
-            new ExpenseCategory
-            {
-                Id = 2,
-                Name = "Ulaşım",
-                Description = "Ulaşım giderleri",
-                CreatedAt = new DateTime(2025, 04, 19, 00, 00, 00, DateTimeKind.Utc),
-                CreatedBy = "seed",
-                IsActive = true
-            },
-            new ExpenseCategory
-            {
-                Id = 3,
-                Name = "Konaklama",
-                Description = "Otel, pansiyon vb.",
-                CreatedAt = new DateTime(2025, 04, 19, 00, 00, 00, DateTimeKind.Utc),
-                CreatedBy = "seed",
-                IsActive = true
-            }
-        );
-
-        // Seed User
-        modelBuilder.Entity<User>().HasData(
-            new User
-            {
-                Id = 1,
-                FirstName = "Admin",
-                LastName = "User",
-                IdentityNumber = "11111111111",
-                UserName = "Admin",
-                Email = "admin@expense.com",
-                IBAN = "TR000000000000000000000001",
-                PasswordSalt = "seededSalt",
-                /////password = "admin123"/////
-                PasswordHash = "EEB17C526DC68D7531DFE22A0A0031EBDD0C7213C4F83D6937589C0028BDCE06",
-                Role = UserRole.Admin,
-                CreatedAt = new DateTime(2025, 04, 19, 00, 00, 00, DateTimeKind.Utc),
-                CreatedBy = "seed",
-                IsActive = true
-            });
-
-
     }
+    
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker.Entries()
