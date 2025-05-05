@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fn_get_user_expenses(p_user_id BIGINT)
+CREATE OR REPLACE FUNCTION dbo.fn_get_user_expenses(p_user_id BIGINT)
 RETURNS TABLE (
     ClaimId BIGINT,
     CategoryName VARCHAR(100),
