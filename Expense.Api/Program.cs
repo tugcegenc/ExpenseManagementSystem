@@ -9,6 +9,7 @@ using Expense.Application.Services.Interfaces.Services;
 using Expense.Application.Services.Interfaces.Sessions;
 using Expense.Application.Validators;
 using Expense.Common.Configurations;
+using Expense.Infrastructure;
 using Expense.Infrastructure.Context;
 using Expense.Infrastructure.Repositories;
 using Expense.Infrastructure.Services;
@@ -21,6 +22,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
+
 
 
 
@@ -57,7 +59,6 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
 builder.Services.AddSingleton<DapperContext>();
-
 
 
 // JwtConfig  
@@ -184,5 +185,11 @@ app.UseMiddleware<ExceptionMiddleware>();
 
 
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ExpenseDbContext>();
+    await DataSeeder.SeedAsync(dbContext);
+}
 
 app.Run();

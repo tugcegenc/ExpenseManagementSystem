@@ -84,15 +84,14 @@ If there are no migrations, create the initial one:
 dotnet ef migrations add InitialCreate --project Expense.Infrastructure --startup-project Expense.Api
 ```
 
-5. Run the API and Email Consumer projects:
+5. Run the API and Email Consumer projects from within the Expense.Api and Expense.EmailConsumer directories:
 
 ```bash
-dotnet run --project Expense.Api
-dotnet run --project Expense.EmailConsumer
+dotnet run
 ```
 
 6. Access the Swagger interface:
-   👉 `http://localhost:5220/swagger`
+   👉 `http://localhost:5220/index.html`
 
 ---
 
