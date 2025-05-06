@@ -47,24 +47,22 @@ When the database is first created, the system automatically adds the following 
 
 ## 🚀 How to Run
 
-### Method 1: Run with Docker Compose (Recommended)
+### Run with Docker Compose (Recommended)
 
 > Docker and Docker Compose must be installed.
 
 1. Clone the project:
 
 ```bash
-git clone https://github.com/yourusername/ExpenseManagementSystem.git
+git clone https://github.com/tugcegenc/ExpenseManagementSystem.git
 cd ExpenseManagementSystem
 ```
 
-2. Create the appsettings file:
+2. Run app_settings.sh to place the required appsettings files, then customize Expense.EmailConsumer/appsettings.Local.json to configure the email sender account:
 
 ```bash
-cp appsettings.Local.sample.json appsettings.Local.json
+./app_settings.sh
 ```
-
-Update PostgreSQL, Redis, RabbitMQ, and SMTP settings according to your system.
 
 3. Start Docker services:
 
@@ -95,37 +93,6 @@ dotnet run --project Expense.EmailConsumer
 
 6. Access the Swagger interface:
    👉 `http://localhost:5220/swagger`
-
----
-
-### Method 2: Manual Setup on Local Machine
-
-> PostgreSQL, Redis, and RabbitMQ must be installed and running on your system.
-
-1. Clone the project:
-
-```bash
-git clone https://github.com/yourusername/ExpenseManagementSystem.git
-```
-
-2. Fill in the `appsettings.Local.json` file.
-
-3. Create a PostgreSQL database named `ExpenseDb`.
-
-4. Run the migration to set up the database and load seed data:
-
-```bash
-dotnet ef database update --project Expense.Infrastructure --startup-project Expense.Api
-```
-
-> This process will automatically add 2 default users (admin & personnel).
-
-5. Run the API and Email Consumer:
-
-```bash
-dotnet run --project Expense.Api
-dotnet run --project Expense.EmailConsumer
-```
 
 ---
 
