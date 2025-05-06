@@ -40,7 +40,7 @@ public class ReportRepository : IReportRepository
     
     public async Task<CompanyStatusSummaryResponse?> GetCompanyExpenseStatusSummaryAsync(DateTime startDate, DateTime endDate)
     {
-        var sql = "SELECT * FROM fn_get_company_expense_status_summary(@StartDate, @EndDate)";
+        var sql = "SELECT * FROM dbo.fn_get_company_expense_status_summary(@StartDate, @EndDate)";
         var parameters = new DynamicParameters();
         parameters.Add("StartDate", startDate);
         parameters.Add("EndDate", endDate);

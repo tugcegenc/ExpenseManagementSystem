@@ -18,14 +18,14 @@ public class UserController : ControllerBase
         _userService = userService;
     }
     
-    [HttpGet]
+    [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll()
     {
         var result = await _userService.GetAllAsync();
         return Ok(result);
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("GetById/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)

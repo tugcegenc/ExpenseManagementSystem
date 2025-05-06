@@ -17,7 +17,7 @@ public class ExpenseCategoryController : ControllerBase
     }
     
     [Authorize(Roles = "Admin, Personnel")]
-    [HttpGet]
+    [HttpGet("GetAll")]
     public async Task<IActionResult> GetAll()
     {
         var result = await _expenseCategoryService.GetAllAsync();
@@ -25,7 +25,7 @@ public class ExpenseCategoryController : ControllerBase
     }
 
     [Authorize(Roles = "Admin, Personnel")]
-    [HttpGet("{id}")]
+    [HttpGet("GetById/{id}")]
     public async Task<IActionResult> GetById(int id)
     {
         if (id <= 0)

@@ -94,7 +94,7 @@ dotnet run --project Expense.EmailConsumer
 ```
 
 6. Access the Swagger interface:
-   👉 `http://localhost:5000/swagger`
+   👉 `http://localhost:5220/swagger`
 
 ---
 
