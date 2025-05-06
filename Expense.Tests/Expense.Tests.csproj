@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
+    <IsPackable>false</IsPackable>
+    <PreserveCompilationContext>true</PreserveCompilationContext> 
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="8.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageReference Include="MockQueryable.Moq" Version="7.0.3" />
     <PackageReference Include="Moq" Version="4.20.72" />
@@ -33,6 +36,14 @@
     <ProjectReference Include="..\Expense.Infrastructure\Expense.Infrastructure.csproj" />
     <ProjectReference Include="..\Expense.Domain\Expense.Domain.csproj" />
     <ProjectReference Include="..\Expense.Common\Expense.Common.csproj" />
+    <ProjectReference Include="..\Expense.Api\Expense.Api.csproj" />
   </ItemGroup>
+
+  <Target Name="CopyDepsFile" AfterTargets="Build">
+  <!-- <Copy SourceFiles="..\Expense.Api\bin\$(Configuration)\net9.0\Expense.Api.deps.json"
+        DestinationFolder="$(OutputPath)" 
+        SkipUnchangedFiles="true" /> -->
+  </Target>
+
 
 </Project>

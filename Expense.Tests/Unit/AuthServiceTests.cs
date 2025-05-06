@@ -53,7 +53,8 @@ public class AuthServiceTests
         _mockUnitOfWork.Setup(x => x.GetRepository<User>()).Returns(mockUserRepo.Object);
         _mockUnitOfWork.Setup(x => x.GetRepository<RefreshToken>()).Returns(mockRefreshTokenRepo.Object);
 
-        // ---------- Act ----------
+        // ---------- Arrange ----------
+
         var result = await _authService.LoginAsync(request);
 
         // ---------- Assert ----------
